@@ -23,7 +23,7 @@ base_path = os.path.join(args.log_dir, args.model_type)
 
 # seeds = [0,42,1346,325,1243,76,423,567,34,534,46,456,346,12,239]
 # seeds = [0,42]
-seeds = [1346]
+seeds = [34]
 macro_f1_all_0 = []
 weighted_f1_all_0 = []
 macro_precision_all_0 = []
