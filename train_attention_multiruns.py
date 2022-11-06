@@ -21,8 +21,9 @@ anneal_factor = args.anneal_factor
 patience = args.patience
 base_path = os.path.join(args.log_dir, args.model_type)
 
-seeds = [0,42,1346,325,1243,76,423,567,34,534,46,456,346,12,239]
+# seeds = [0,42,1346,325,1243,76,423,567,34,534,46,456,346,12,239]
 # seeds = [0,42]
+seeds = [1346]
 macro_f1_all_0 = []
 weighted_f1_all_0 = []
 macro_precision_all_0 = []
@@ -53,16 +54,29 @@ for seed in seeds:
     VAL_SPLIT_PATH = args.val_split_path
 
     # Load datasets
-    train_dataset = MICDataset(TRAIN)
-    train_val_split = np.load(args.val_split_path)
-    train_data = Subset(train_dataset, train_val_split['train'])
-    val_data = Subset(train_dataset, train_val_split['val'])
-    train_loader = DataLoader(train_data, batch_size, shuffle=True)
-    val_loader = DataLoader(val_data, batch_size)
+    if args.model_type != 'Resnet':
+        train_dataset = MICDataset(TRAIN)
+        train_val_split = np.load(args.val_split_path)
+        train_data = Subset(train_dataset, train_val_split['train'])
+        val_data = Subset(train_dataset, train_val_split['val'])
+        train_loader = DataLoader(train_data, batch_size, shuffle=True)
+        val_loader = DataLoader(val_data, batch_size)
 
-    test_dataset = MICDataset(TEST)
-    test_loader = DataLoader(test_dataset, batch_size)
+        test_dataset = MICDataset(TEST)
+        test_loader = DataLoader(test_dataset, batch_size)
+    else:
+        train_dataset = MICDataset_ResNet(TRAIN)
+        train_val_split = np.load(args.val_split_path)
+        train_data = Subset(train_dataset, train_val_split['train'])
+        val_data = Subset(train_dataset, train_val_split['val'])
+        train_loader = DataLoader(train_data, batch_size, shuffle=True)
+        val_loader = DataLoader(val_data, batch_size)
 
+        test_dataset = MICDataset_ResNet(TEST)
+        test_loader = DataLoader(test_dataset, batch_size)
+        
+        
+        
 
     #-------------------#
     # Model Definition  #
@@ -80,6 +94,8 @@ for seed in seeds:
         model = FC_T()
     elif args.model_type == 'RNN':
         model = BaselineRNN_2()
+    elif args.model_type == 'Resnet':
+        model = ResNet_T()
     model = model.cuda()
 
     optimizer = torch.optim.Adam(
