@@ -89,8 +89,6 @@ for seed in seeds:
                 hidden_units=args.hidden_size,
                 drop_rate=args.dropout_rate)
     elif args.model_type == 'FC':
-        model = FC()
-    elif args.model_type == 'FC_T':
         model = FC_T()
     elif args.model_type == 'RNN':
         model = BaselineRNN_2()
@@ -102,36 +100,10 @@ for seed in seeds:
             model.parameters(),
             lr=lr,
             weight_decay=args.wd)
-
-    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-    #         optimizer, 
-    #         factor=anneal_factor,
-    #         patience=patience,
-    #         threshold=1e-3)
-
     scheduler = torch.optim.lr_scheduler.MultiStepLR(optimizer, [30], gamma = 0.1)
-    # scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, 0.95)
-    # scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, 
-            # factor=anneal_factor, patience=patience, threshold=0.05)
-    # scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, 10, 1e-5)
-    # criterion = torch.nn.BCEWithLogitsLoss(reduction='none').cuda()
-
-    # if args.loss_type == 'BCE':
-    #     criterion = BCE()
-    # elif args.loss_type == 'PartialBCE':
-    #     criterion = PartialBCE(args.alpha, args.beta, args.gamma)
     criterion = torch.nn.BCELoss()
 
-    # # Make logs
-    # log_dir = '../../log/ISMIR_missing/Discriminative/'
-    # # time_string = datetime.datetime.now().isoformat()
-    # time_string = ""
-    # run_name = "{}_{}_missing_{}_lr_{}_lr_decay_{}_patience_{}\
-        # ".format(args.id, model.__class__.__name__, missing, lr, 
-        # anneal_factor, patience)
-
-    # remove_dir(os.path.join(log_dir, run_name))
-    # writer = SummaryWriter(os.path.join(log_dir, run_name))
+# make logs
     writer_path = os.path.join(base_path, args.id+'_seed_'+str(seed))
     remove_dir(writer_path)
     print("Dumping logs in {}".format(writer_path))

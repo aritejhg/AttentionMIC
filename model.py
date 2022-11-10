@@ -12,10 +12,6 @@ def count_parameters(model):
     for name, param in model.named_parameters():
         if param.requires_grad:
             num_param = np.prod(param.size())
-            # if param.dim() > 1:
-            #     print(name, ':', 'x'.join(str(x) for x in list(param.size())), '=', num_param)
-            # else:
-            #     print(name, ':', num_param)
             total_param += num_param
     # print('Total Parameters: {}'.format(total_param))
     return total_param
@@ -77,12 +73,6 @@ class ResNet_T(nn.Module):
             nn.Linear(512, 512),
             nn.Dropout(0.5),
             nn.LeakyReLU(),
-            # nn.Linear(512, 512),
-            # nn.Dropout(0.5),
-            # nn.LeakyReLU(),
-            # nn.Linear(512, 512),
-            # nn.Dropout(0.5),
-            # nn.LeakyReLU(),
             nn.Linear(512, 128),
             nn.Dropout(0.5),
             nn.LeakyReLU(),
@@ -124,42 +114,7 @@ class ResNet_T(nn.Module):
         return out
     
     
-    
-class FC(nn.Module):
-    def __init__(self):
-        super(FC, self).__init__()
-        self.FC = nn.Sequential(
-            nn.Linear(1280, 512),
-            nn.Dropout(0.5),
-            nn.LeakyReLU(),
-            nn.Linear(512, 512),
-            nn.Dropout(0.5),
-            nn.LeakyReLU(),
-            # nn.Linear(512, 512),
-            # nn.Dropout(0.5),
-            # nn.LeakyReLU(),
-            # nn.Linear(512, 512),
-            # nn.Dropout(0.5),
-            # nn.LeakyReLU(),
-            nn.Linear(512, 128),
-            nn.Dropout(0.5),
-            nn.LeakyReLU(),
-            nn.Linear(128, 20)
-        )
-        self.param_count = count_parameters(self)
-        print(self.param_count)
-        
-        for m in self.modules():
-            if isinstance(m, nn.Linear):
-                init.xavier_normal_(m.weight.data)
-                if m.bias is not None:
-                    m.bias.data.zero_()
-    def forward(self, X):
-        X = X.view(X.shape[0], -1)
-        out = torch.sigmoid(self.FC(X))
-        return out
-   
-# I used this     
+     
 class FC_T(nn.Module):
     def __init__(self):
         super(FC_T, self).__init__()
@@ -170,12 +125,6 @@ class FC_T(nn.Module):
             nn.Linear(128, 128),
             nn.Dropout(0.5),
             nn.LeakyReLU(),
-            # nn.Linear(512, 512),
-            # nn.Dropout(0.5),
-            # nn.LeakyReLU(),
-            # nn.Linear(512, 512),
-            # nn.Dropout(0.5),
-            # nn.LeakyReLU(),
             nn.Linear(128, 128),
             nn.Dropout(0.5),
             nn.LeakyReLU(),
@@ -195,44 +144,6 @@ class FC_T(nn.Module):
         out = (out+X).mean(1)
         out = torch.sigmoid(self.classify(out))
         return out
-        
-# Same model as above with max pooling instead of mean pooling
-# class FC_T(nn.Module):
-    # def __init__(self):
-        # super(FC_T, self).__init__()
-        # self.embed = nn.Sequential(
-            # nn.Linear(128, 128),
-            # nn.Dropout(0.6),
-            # nn.LeakyReLU(),
-            # nn.Linear(128, 128),
-            # nn.Dropout(0.6),
-            # nn.LeakyReLU(),
-            # # nn.Linear(512, 512),
-            # # nn.Dropout(0.5),
-            # # nn.LeakyReLU(),
-            # # nn.Linear(512, 512),
-            # # nn.Dropout(0.5),
-            # # nn.LeakyReLU(),
-            # nn.Linear(128, 128),
-            # nn.Dropout(0.6),
-            # nn.LeakyReLU(),
-        # )
-        
-        # self.classify = nn.Linear(128, 20)
-        # self.param_count = count_parameters(self)
-        # print(self.param_count)
-        
-        # for m in self.modules():
-            # if isinstance(m, nn.Linear):
-                # init.xavier_normal_(m.weight.data)
-                # if m.bias is not None:
-                    # m.bias.data.zero_()
-    # def forward(self, X):
-        # out = self.embed(X)
-        # out,_ = (out+X).max(1)
-        # out = torch.sigmoid(self.classify(out))
-        # return out
-
 
 class BaselineRNN_2(nn.Module):
     def __init__(self):

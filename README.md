@@ -4,6 +4,12 @@ This repo consists of the code accompanying the ISMIR 2019 paper:
 
 Siddharth Gururani, Mohit Sharma, Alexander Lerch. An Attention Mechanism for Musical Instrument Recognition. (To appear) In Proceedings of the International Society of Music Information Retrieval, ISMIR 2019.
 
+This has been adapted by Aritejh and Jaymi for our ESP3201 project.
+
+## Adaptations
+Since this was used for ESP3201 project, a few adaptations have been made. Specifically, ResNet34 has been implemented as a baseline along with a new dataloader MICDataset_ResNet in data_utils in order to load images from spectograms. The seeds have been changed as well.
+
+
 ## Data
 
 Before you run any code, please download the data from [here](https://drive.google.com/open?id=1feFBcMAe80Qy_EAYhamxNTfW46ICfEOn
